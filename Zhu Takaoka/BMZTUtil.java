@@ -1,24 +1,27 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class BMZTUtil {
-	static final boolean DEBUG_BAD_CHARACTER_TABLE = true;
-	static final boolean DEBUG_GOOD_SUFFIX_TABLE = true;
-	static final boolean DEBUG_SUFFIX_TABLE = true;
-	static final boolean PRINT_SHIFT = true;
+	static final boolean DEBUG_BAD_CHARACTER_TABLE = false;
+	static final boolean DEBUG_GOOD_SUFFIX_TABLE = false;
+	static final boolean DEBUG_SUFFIX_TABLE = false;
+	static final boolean PRINT_SHIFT = false;
+	static final boolean PRINT_BENCHMARK = false;
 //	static final boolean DEBUG_BAD_CHARACTER_TABLE = false;
 //	static final boolean DEBUG_GOOD_SUFFIX_TABLE = false;
 //	static final boolean DEBUG_SUFFIX_TABLE = false;
 //	static final boolean PRINT_SHIFT = false;
-	
+
 //	Printa em formato de tabela
 	public static void printAsTable(String title, String labels[], HashMap<String, ArrayList<String>> values, int columnSize, int lineAmount, String verticalLabels[]){
 		//Gera Strings que representam as linhas horizontais
 		char lineChar = '_';
 		StringBuffer str = new StringBuffer();
 		StringBuffer horizontalLinebuffer = new StringBuffer();
-		for(int j=0; j<columnSize+1; j++) 
+		for(int j=0; j<columnSize+1; j++)
 			horizontalLinebuffer.append(lineChar);
 		String horizontalLineTop = horizontalLinebuffer.toString();
 		int extraVerticalColumnSize = 0;
@@ -31,12 +34,12 @@ public class BMZTUtil {
 		horizontalLinebuffer.append(lineChar);
 		horizontalLineTop = horizontalLinebuffer.toString();
 		String horizontalLineBottom = horizontalLineTop.replace(lineChar,'\u00AF');
-		
+
 		//Printa a tabela
 		String labelFormat = "%" + columnSize + "s|";
 		String numberFormat = "%" + columnSize + "s|";
 		str.append(horizontalLineTop).append("\n");
-		
+
 		str.append(String.format("|%-" + ((columnSize+1)*(labels.length + extraVerticalColumnSize)-1)  +"s|", title)).append("\n|");
 		if(verticalLabels != null && verticalLabels.length > 0)
 			str.append(String.format(labelFormat, " "));
@@ -59,7 +62,7 @@ public class BMZTUtil {
 		str.append(horizontalLineBottom);
 		System.out.println(str.toString());
 	}
-	
+
 	public static String[] objectsToSTrings(Object[] array){
 		String retorno[] = new String[array.length];
 		for(int i=0; i<retorno.length; i++){
@@ -67,14 +70,14 @@ public class BMZTUtil {
 		}
 		return retorno;
 	}
-	
+
 //	Printa em formato de tabela
 //	public static void printAsTable(String title, String labels[], HashMap<String, ArrayList<String>> values, int columnSize, int lineAmount){
 //		//Gera Strings que representam as linhas horizontais
 //		char lineChar = '_';
 //		StringBuffer str = new StringBuffer();
 //		StringBuffer horizontalLinebuffer = new StringBuffer();
-//		for(int j=0; j<columnSize+1; j++) 
+//		for(int j=0; j<columnSize+1; j++)
 //			horizontalLinebuffer.append(lineChar);
 //		String horizontalLineTop = horizontalLinebuffer.toString();
 //		for(int i=1; i<labels.length; i++)
@@ -82,7 +85,7 @@ public class BMZTUtil {
 //		horizontalLinebuffer.append(lineChar);
 //		horizontalLineTop = horizontalLinebuffer.toString();
 //		String horizontalLineBottom = horizontalLineTop.replace(lineChar,'\u00AF');
-//		
+//
 //		//Printa a tabela
 //		String labelFormat = "%" + columnSize + "s|";
 //		String numberFormat = "%" + columnSize + "s|";
@@ -105,4 +108,24 @@ public class BMZTUtil {
 //		str.append(horizontalLineBottom);
 //		System.out.println(str.toString());
 //	}
+
+	public static String readFromFile(String fileName) {
+		BufferedReader br = null;
+		String ret = null;
+		try {
+			String sCurrentLine;
+			br = new BufferedReader(new FileReader(fileName));
+			ret = br.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+		return ret;
+	}
 }
