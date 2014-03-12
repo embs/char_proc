@@ -167,7 +167,7 @@ namespace SuffixArray
         /// </summary>
         /// <param name="str">A string cujo array de strings será criado.</param>
         /// <returns>O array de sufixos da string dada como entrada.</returns>
-        public static string[] SuffixArray(string str)
+        static string[] SuffixArray(string str)
         {
             var s = ToIntegerAlphabet(str);         // Transforma a string para ser usada como entrada no algoritmo
             var SA = new int[s.Length];             // Cria o array que servirá pra armazenar as posições dos sufixos do array de sufixos
@@ -197,7 +197,7 @@ namespace SuffixArray
         /// </summary>
         /// <param name="str">A string cujo array de strings será criado.</param>
         /// <returns>O array de sufixos da string dada como entrada.</returns>
-        public static long SuffixArrayTime(string str)
+        static long SuffixArrayTime(string str)
         {
             var s = ToIntegerAlphabet(str);         // Transforma a string para ser usada como entrada no algoritmo
             var SA = new int[s.Length];             // Cria o array que servirá pra armazenar as posições dos sufixos do array de sufixos
@@ -234,6 +234,56 @@ namespace SuffixArray
             }
 
             return intStr;                                          // Retorna o array de inteiros
+        }
+
+        public static void StringTest(string str, int numTests = 1, int skipTest = 0, bool printEach = false)
+        {
+            List<double> sample = new List<double>();
+            for (int i = 0; i < numTests; i++)
+            {
+                var result = SuffixArrayTime(str);
+                if (i + 1 > skipTest)
+                {
+                    if (printEach) Console.WriteLine("Tempo: " + (double)1000 * result / Stopwatch.Frequency + "ms.");
+                    sample.Add(result);
+                }
+            }
+
+            var media = Statistics.Mean(sample);
+            var sd = Statistics.StandardDeviation(sample);
+
+            Console.WriteLine("String testada: " + str + " n = " + str.Length + " Numero de testes: " + (numTests - skipTest));
+            Console.WriteLine("Tempo medio: " + (double)1000 * media / Stopwatch.Frequency + "ms.");
+            Console.WriteLine("Desvio padrao: " + (double)1000 * sd / Stopwatch.Frequency + "ms.");
+        }
+
+        public static void FileTest(string filename, int numTests = 1, int skipTest = 0, bool printEach = false)
+        {
+            string text = System.IO.File.ReadAllText(filename, UTF8Encoding.UTF8);
+            List<double> sample = new List<double>();
+            for (int i = 0; i < numTests; i++)
+            {
+                var result = SuffixArrayTime(text);
+                if (i + 1 > skipTest)
+                {
+                    if (printEach) Console.WriteLine("Tempo: " + (double)1000 * result / Stopwatch.Frequency + "ms.");
+                    sample.Add(result);
+                }
+            }
+
+            var media = Statistics.Mean(sample);
+            var sd = Statistics.StandardDeviation(sample);
+
+            Console.WriteLine("Texto testado: " + filename + " n = " + text.Length + " Numero de testes: " + (numTests - skipTest));
+            Console.WriteLine("Tempo medio: " + (double)1000 * media / Stopwatch.Frequency + "ms.");
+            Console.WriteLine("Desvio padrao: " + (double)1000 * sd / Stopwatch.Frequency + "ms.");
+        }
+
+        public static void SuffixList(string str)
+        {
+            var result = SuffixArray(str);
+            Console.WriteLine("Lista de sufixos da palavra \"" + str + "\" (n = " + str.Length + "):");
+            foreach (var item in result) Console.WriteLine(item);
         }
     }
 }
