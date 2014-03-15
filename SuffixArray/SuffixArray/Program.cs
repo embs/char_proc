@@ -14,11 +14,14 @@ namespace SuffixArray
             try
             {
                 //SuffixList("mississippi");
-                Naive.StringTest("mississippi", 101, 1, false);
-                Skew.StringTest("mississippi", 101, 1, false);
-
-                Naive.FileTest("biblia.txt", 1, 0, true);
-                Skew.FileTest("biblia.txt", 1, 0, true);
+                //Naive.StringTest("banana", 1000001, 1, false);
+                //Skew.StringTest("banana", 1000001, 1, false);
+                var test = RandomString(4, 100);
+                Naive.StringTest(test, 1000001, 1, false);
+                Skew.StringTest(test, 1000001, 1, false);
+                
+                //Skew.FileTest("E.coli", 21, 1, true);
+                //Skew.FileTest("shakespeare.txt", 21, 1, true);
             }
             catch (Exception e)
             {
@@ -26,6 +29,18 @@ namespace SuffixArray
                 Console.WriteLine(e.StackTrace + e.Message);
             }
             Console.ReadKey();
+        }
+
+        static string RandomString(int chars, int size)
+        {
+            var alphabet = "abcdefghijklmnopqrstuvwxyz";
+            var random = new Random();
+            var result = new string(
+                Enumerable.Repeat(alphabet.Substring(alphabet.Length - chars, chars), size)
+                .Select(s => s[random.Next(s.Length)])
+                .ToArray());
+
+            return result;
         }
 
 
